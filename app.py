@@ -107,7 +107,7 @@ def dashboard():
         </head>
         <body>
             <div class="top-buttons">
-                <a href="{url_for('descargar_csv')}" class="btn">Descargar CSV</a>
+                <a href="{url_for('descargar_csv')}" class="btn">CSV Por Reporte </a>
                 <a href="{url_for('logout')}" class="btn">Cerrar sesión</a>
             </div>
 
