@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Facturación - Keytronics</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #e6edf3;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #161b22;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #238636;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .container {
+            margin: 40px auto;
+            width: 90%;
+            max-width: 1000px;
+            background-color: #161b22;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(35, 134, 54, 0.4);
+            padding: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 0 15px #238636;
+        }
+
+        .logout {
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .logout a {
+            color: #f85149;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Panel de Facturación - Keytronics</h1>
+    </header>
+
+    <div class="container">
+        <h2>Bienvenido</h2>
+        <p>Este panel muestra el resumen de facturación en tiempo real:</p>
+
+        <!-- 🔒 IFRAME EMBEBIDO DE POWER BI SIN BOTONES -->
+        <iframe 
+            src="https://app.powerbi.com/view?r=eyJrIjoiNzI5NWQ3ODctMTZlYy00MGI2LThiZGMtZWI0NzVjYjQ4MmVkIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9" 
+            title="Dashboard Power BI"
+            allowfullscreen="true"
+            sandbox="allow-same-origin allow-scripts allow-forms"
+            onload="ocultarElementosPowerBI(this)">
+        </iframe>
+
+        <div class="logout">
+            <a href="/logout">Cerrar sesión</a>
+        </div>
+    </div>
+
+    <script>
+        // Intenta ocultar botones y menús de Power BI si aparecen
+        function ocultarElementosPowerBI(iframe) {
+            try {
+                let doc = iframe.contentWindow.document;
+                setTimeout(() => {
+                    const elementos = doc.querySelectorAll('button, a, div');
+                    elementos.forEach(el => {
+                        if (
+                            el.innerText.includes('Microsoft') ||
+                            el.innerText.includes('Power BI') ||
+                            el.title?.includes('Compartir')
+                        ) {
+                            el.style.display = 'none';
+                        }
+                    });
+                }, 3000);
+            } catch (e) {
+                console.warn("No se pudo modificar el contenido embebido (restricciones del iframe).");
+            }
+        }
+    </script>
+</body>
+</html>
