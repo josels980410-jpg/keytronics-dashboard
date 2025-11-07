@@ -95,7 +95,7 @@ def dashboard():
         </head>
         <body>
             <a href="{url_for('logout')}" class="logout">Cerrar sesión</a>
-            <h2>Bienvenido, {session["user"]}</h2>
+            <h2>Bienvenido</h2>
 
             <!-- 🔒 IFRAME DE POWER BI SIN BOTONES -->
             <iframe src="{embed_url}" allowfullscreen="true"
