@@ -17,7 +17,7 @@
         }
         .login-container {
             background-color: #161b22;
-            padding: 20px;
+            padding: 30px;
             border-radius: 12px;
             box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
             width: 350px;
@@ -28,14 +28,16 @@
         }
         input[type="text"], input[type="password"] {
             width: 100%;
-            padding: 8px;
-            margin: 8px 0 16px;
-            border: none;
+            box-sizing: border-box; /* <-- asegura que el padding no afecte el ancho */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #00ff7f;
             border-radius: 6px;
             background-color: #0d1117;
             color: #fff;
-            border: 1px solid #00ff7f;
+            font-size: 15px;
         }
+
         button {
             width: 100%;
             background-color: #00ff7f;
