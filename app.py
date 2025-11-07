@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
 from datetime import timedelta
 
 # ------------------- CONFIGURACIÓN FLASK -------------------
@@ -83,10 +83,14 @@ def dashboard():
                 iframe::-webkit-scrollbar {{
                     display: none;
                 }}
-                .logout {{
+                .top-buttons {{
                     position: absolute;
                     top: 15px;
                     right: 25px;
+                    display: flex;
+                    gap: 10px;
+                }}
+                .btn {{
                     background-color: transparent;
                     color: #00ff80;
                     border: 1px solid #00ff80;
@@ -95,14 +99,18 @@ def dashboard():
                     text-decoration: none;
                     transition: 0.3s;
                 }}
-                .logout:hover {{
+                .btn:hover {{
                     background-color: #00ff80;
                     color: #0a0a0a;
                 }}
             </style>
         </head>
         <body>
-            <a href="{url_for('logout')}" class="logout">Cerrar sesión</a>
+            <div class="top-buttons">
+                <a href="{url_for('descargar_csv')}" class="btn">Descargar CSV</a>
+                <a href="{url_for('logout')}" class="btn">Cerrar sesión</a>
+            </div>
+
             <h2>Bienvenido</h2>
 
             <!-- 🔒 IFRAME DE POWER BI SIN BOTONES -->
@@ -116,7 +124,6 @@ def dashboard():
                     try {{
                         let doc = iframe.contentWindow.document;
                         setTimeout(() => {{
-                            // Intenta ocultar el logo y los botones si aparecen
                             const botones = doc.querySelectorAll('button, a, div');
                             botones.forEach(el => {{
                                 if (el.innerText.includes('Microsoft') || el.innerText.includes('Power BI') || el.title?.includes('Compartir')) {{
@@ -134,6 +141,22 @@ def dashboard():
     """
 
 
+@app.route("/descargar_csv")
+def descargar_csv():
+    if "user" not in session:
+        return redirect(url_for("home"))
+
+    # 📁 Ruta donde está tu archivo CSV
+    directorio = os.path.dirname(os.path.abspath(__file__))
+    nombre_archivo = "datos_reporte_Keytronics.csv"  # Cambia este nombre si tu archivo tiene otro
+
+    return send_from_directory(
+        directory=directorio,
+        path=nombre_archivo,
+        as_attachment=True
+    )
+
+
 @app.route("/logout")
 def logout():
     session.pop("user", None)
@@ -142,5 +165,5 @@ def logout():
 
 # ------------------- EJECUCIÓN APP -------------------
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT",5000))
-    app.run(host="0.0.0.0",port=port, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)

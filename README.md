@@ -9,8 +9,15 @@ Nota:
 
 inicia el entorno virtual 
 
-                .\venv\Scripts\Activate.ps1
+.\venv\Scripts\Activate.ps1
 
 python --version
 pip --version
+
+-----------USUARIO---------------------
+
+https://keytronics-dashboard.onrender.com/
+
+Usuario:  usuario01
+Contraseña:  r4#G9tPq!2Zm
 
