@@ -7,12 +7,17 @@ los siguientes comandos:
 
 Nota: 
 
-inicia el entorno virtual 
+-----------inicia el entorno virtual -----------
 
 .\venv\Scripts\Activate.ps1
 
 python --version
 pip --version
+
+-----------Desactivar entorno virtual-----------
+
+deactivate
+
 
 -----------USUARIO---------------------
 

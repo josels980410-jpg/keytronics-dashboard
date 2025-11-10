@@ -148,7 +148,7 @@ def descargar_csv():
 
     # 📁 Ruta donde está tu archivo CSV
     directorio = os.path.dirname(os.path.abspath(__file__))
-    nombre_archivo = "datos_reporte_Keytronics.csv"  # Cambia este nombre si tu archivo tiene otro
+    nombre_archivo = "datos_reporte_Keytronics.xlsx"  # Cambia este nombre si tu archivo tiene otro
 
     return send_from_directory(
         directory=directorio,
