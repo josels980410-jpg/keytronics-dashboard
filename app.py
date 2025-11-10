@@ -1,6 +1,7 @@
 import os
+import json
 import gspread
-from google.oauth2.service_account import Credentials
+from google.oauth2 import service_account
 from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
 from datetime import datetime, timedelta
 
@@ -10,8 +11,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "keytronics123")
 app.permanent_session_lifetime = timedelta(minutes=30)
 
 # ------------------- CONFIGURACIÓN GOOGLE SHEETS -------------------
-GOOGLE_SHEETS_ID = "1qExzOzO2YIK_ldAZsHFcQtHbBVHxIhQNKrg3kT6S1rI"  # ⚠️ Reemplaza con el ID de tu hoja de cálculo
-CREDENCIALES_JSON = os.path.join(os.path.dirname(__file__), "credenciales_google.json")
+GOOGLE_SHEETS_ID = "1qExzOzO2YIK_ldAZsHFcQtHbBVHxIhQNKrg3kT6S1rI"  # ID de tu hoja de cálculo
 
 scope = [
     "https://spreadsheets.google.com/feeds",
@@ -19,9 +19,22 @@ scope = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-credentials = Credentials.from_service_account_file(CREDENCIALES_JSON, scopes=scope)
-client = gspread.authorize(credentials)
-sheet = client.open_by_key(GOOGLE_SHEETS_ID).sheet1  # Usa la primera hoja
+# ✅ Cargar credenciales desde variable de entorno (Render)
+google_credentials = os.getenv("GOOGLE_CREDENTIALS")
+
+if google_credentials:
+    try:
+        info = json.loads(google_credentials)
+        credentials = service_account.Credentials.from_service_account_info(info, scopes=scope)
+        client = gspread.authorize(credentials)
+        sheet = client.open_by_key(GOOGLE_SHEETS_ID).sheet1
+        print("✅ Conexión exitosa con Google Sheets.")
+    except Exception as e:
+        print(f"⚠️ Error al conectar con Google Sheets: {e}")
+        sheet = None
+else:
+    print("⚠️ No se encontró la variable de entorno GOOGLE_CREDENTIALS.")
+    sheet = None
 
 # ------------------- USUARIOS PERMITIDOS -------------------
 USUARIOS = {
@@ -40,6 +53,10 @@ USUARIOS = {
 # ------------------- FUNCIONES AUXILIARES -------------------
 def registrar_acceso(usuario):
     """Guarda en Google Sheets el registro de acceso."""
+    if not sheet:
+        print("⚠️ No hay conexión con Google Sheets, acceso no registrado.")
+        return
+
     try:
         fecha = datetime.now().strftime("%Y-%m-%d")
         hora = datetime.now().strftime("%H:%M:%S")
