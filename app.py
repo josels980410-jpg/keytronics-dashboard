@@ -1,6 +1,7 @@
 import os
+import csv
+from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
-from datetime import timedelta
 
 # ------------------- CONFIGURACIÓN FLASK -------------------
 app = Flask(__name__)
@@ -21,7 +22,7 @@ USUARIOS = {
     "usuario10": "Y8!fR5p#T1qZ"
 }
 
-# ------------------- RUTAS PRINCIPALES -------------------
+# ------------------- RUTA PRINCIPAL -------------------
 @app.route("/")
 def home():
     if "user" in session:
@@ -29,6 +30,7 @@ def home():
     return render_template("login.html")
 
 
+# ------------------- LOGIN -------------------
 @app.route("/login", methods=["POST"])
 def login():
     username = request.form["username"]
@@ -37,11 +39,18 @@ def login():
     if username in USUARIOS and USUARIOS[username] == password:
         session.permanent = True
         session["user"] = username
+
+        # ✅ Guardar registro de acceso en CSV
+        with open("accesos_usuarios.csv", "a", newline="") as archivo:
+            writer = csv.writer(archivo)
+            writer.writerow([username, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+
         return redirect(url_for("dashboard"))
     else:
         return render_template("login.html", error="Usuario o contraseña incorrectos")
 
 
+# ------------------- DASHBOARD -------------------
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
@@ -107,13 +116,13 @@ def dashboard():
         </head>
         <body>
             <div class="top-buttons">
-                <a href="{url_for('descargar_csv')}" class="btn"> 📄Reporte </a>
+                <a href="{url_for('descargar_csv')}" class="btn">📄 Reporte</a>
                 <a href="{url_for('logout')}" class="btn">Cerrar sesión</a>
             </div>
 
             <h2>Bienvenido</h2>
 
-            <!-- 🔒 IFRAME DE POWER BI SIN BOTONES -->
+            <!-- 🔒 IFRAME DE POWER BI -->
             <iframe src="{embed_url}" allowfullscreen="true"
                 sandbox="allow-same-origin allow-scripts allow-forms"
                 onload="ocultarElementosPowerBI(this)">
@@ -141,14 +150,14 @@ def dashboard():
     """
 
 
+# ------------------- DESCARGAR CSV REPORTE -------------------
 @app.route("/descargar_csv")
 def descargar_csv():
     if "user" not in session:
         return redirect(url_for("home"))
 
-    # 📁 Ruta donde está tu archivo CSV
     directorio = os.path.dirname(os.path.abspath(__file__))
-    nombre_archivo = "datos_reporte_Keytronics.xlsx"  # Cambia este nombre si tu archivo tiene otro
+    nombre_archivo = "datos_reporte_Keytronics.xlsx"  # Asegúrate que este archivo existe
 
     return send_from_directory(
         directory=directorio,
@@ -157,6 +166,7 @@ def descargar_csv():
     )
 
 
+# ------------------- CERRAR SESIÓN -------------------
 @app.route("/logout")
 def logout():
     session.pop("user", None)
