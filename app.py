@@ -1,12 +1,27 @@
 import os
-import csv
-from datetime import datetime, timedelta
+import gspread
+from google.oauth2.service_account import Credentials
 from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
+from datetime import datetime, timedelta
 
 # ------------------- CONFIGURACIÓN FLASK -------------------
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "keytronics123")
 app.permanent_session_lifetime = timedelta(minutes=30)
+
+# ------------------- CONFIGURACIÓN GOOGLE SHEETS -------------------
+GOOGLE_SHEETS_ID = "1qExzOzO2YIK_ldAZsHFcQtHbBVHxIhQNKrg3kT6S1rI"  # ⚠️ Reemplaza con el ID de tu hoja de cálculo
+CREDENCIALES_JSON = os.path.join(os.path.dirname(__file__), "credenciales_google.json")
+
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
+credentials = Credentials.from_service_account_file(CREDENCIALES_JSON, scopes=scope)
+client = gspread.authorize(credentials)
+sheet = client.open_by_key(GOOGLE_SHEETS_ID).sheet1  # Usa la primera hoja
 
 # ------------------- USUARIOS PERMITIDOS -------------------
 USUARIOS = {
@@ -22,15 +37,24 @@ USUARIOS = {
     "usuario10": "Y8!fR5p#T1qZ"
 }
 
-# ------------------- RUTA PRINCIPAL -------------------
+# ------------------- FUNCIONES AUXILIARES -------------------
+def registrar_acceso(usuario):
+    """Guarda en Google Sheets el registro de acceso."""
+    try:
+        fecha = datetime.now().strftime("%Y-%m-%d")
+        hora = datetime.now().strftime("%H:%M:%S")
+        sheet.append_row([usuario, fecha, hora])
+        print(f"✅ Acceso registrado: {usuario} - {fecha} {hora}")
+    except Exception as e:
+        print(f"⚠️ Error al registrar acceso: {e}")
+
+# ------------------- RUTAS PRINCIPALES -------------------
 @app.route("/")
 def home():
     if "user" in session:
         return redirect(url_for("dashboard"))
     return render_template("login.html")
 
-
-# ------------------- LOGIN -------------------
 @app.route("/login", methods=["POST"])
 def login():
     username = request.form["username"]
@@ -39,24 +63,16 @@ def login():
     if username in USUARIOS and USUARIOS[username] == password:
         session.permanent = True
         session["user"] = username
-
-        # ✅ Guardar registro de acceso en CSV
-        with open("accesos_usuarios.csv", "a", newline="") as archivo:
-            writer = csv.writer(archivo)
-            writer.writerow([username, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
-
+        registrar_acceso(username)
         return redirect(url_for("dashboard"))
     else:
         return render_template("login.html", error="Usuario o contraseña incorrectos")
 
-
-# ------------------- DASHBOARD -------------------
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
         return redirect(url_for("home"))
 
-    # 🟢 Reemplaza aquí con TU enlace público de Power BI
     embed_url = "https://app.powerbi.com/view?r=eyJrIjoiNmQ0YTI3ZDAtNjUxMi00OWFiLWEyNzUtNTg2NTkxYjVkMTYzIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
 
     return f"""
@@ -122,11 +138,9 @@ def dashboard():
 
             <h2>Bienvenido</h2>
 
-            <!-- 🔒 IFRAME DE POWER BI -->
             <iframe src="{embed_url}" allowfullscreen="true"
                 sandbox="allow-same-origin allow-scripts allow-forms"
-                onload="ocultarElementosPowerBI(this)">
-            </iframe>
+                onload="ocultarElementosPowerBI(this)"></iframe>
 
             <script>
                 function ocultarElementosPowerBI(iframe) {{
@@ -149,29 +163,20 @@ def dashboard():
     </html>
     """
 
-
-# ------------------- DESCARGAR CSV REPORTE -------------------
 @app.route("/descargar_csv")
 def descargar_csv():
     if "user" not in session:
         return redirect(url_for("home"))
 
     directorio = os.path.dirname(os.path.abspath(__file__))
-    nombre_archivo = "datos_reporte_Keytronics.xlsx"  # Asegúrate que este archivo existe
+    nombre_archivo = "datos_reporte_Keytronics.xlsx"
 
-    return send_from_directory(
-        directory=directorio,
-        path=nombre_archivo,
-        as_attachment=True
-    )
+    return send_from_directory(directory=directorio, path=nombre_archivo, as_attachment=True)
 
-
-# ------------------- CERRAR SESIÓN -------------------
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
-
 
 # ------------------- EJECUCIÓN APP -------------------
 if __name__ == "__main__":
