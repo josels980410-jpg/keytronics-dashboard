@@ -48,7 +48,7 @@ def dashboard():
         return redirect(url_for("home"))
 
     # 🟢 Reemplaza aquí con TU enlace público de Power BI
-    embed_url = "https://app.powerbi.com/view?r=eyJrIjoiNzI5NWQ3ODctMTZlYy00MGI2LThiZGMtZWI0NzVjYjQ4MmVkIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
+    embed_url = "https://app.powerbi.com/view?r=eyJrIjoiNmQ0YTI3ZDAtNjUxMi00OWFiLWEyNzUtNTg2NTkxYjVkMTYzIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
 
     return f"""
     <html>
@@ -107,7 +107,7 @@ def dashboard():
         </head>
         <body>
             <div class="top-buttons">
-                <a href="{url_for('descargar_csv')}" class="btn">CSV Por Reporte </a>
+                <a href="{url_for('descargar_csv')}" class="btn"> 📄Reporte </a>
                 <a href="{url_for('logout')}" class="btn">Cerrar sesión</a>
             </div>
 
