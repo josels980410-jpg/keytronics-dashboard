@@ -16,7 +16,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "keytronics123")
 app.permanent_session_lifetime = timedelta(minutes=30)
 
 # ------------------- CONFIGURACIÓN GOOGLE SHEETS -------------------
-GOOGLE_SHEETS_ID = "1qExzOzO2YIK_ldAZsHFcQtHbBVHxIhQNKrg3kT6S1rI"  # ID de tu hoja de cálculo
+GOOGLE_SHEETS_ID = "1qExzOzO2YIK_ldAZsHFcQtHbBVHxIhQNKrg3kT6S1rI"  # ID hoja de cálculo
 
 scope = [
     "https://spreadsheets.google.com/feeds",
@@ -202,5 +202,6 @@ def logout():
 
 # ------------------- EJECUCIÓN APP -------------------
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port, debug=False)
+
