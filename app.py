@@ -1,9 +1,14 @@
 import os
+import time
 import json
 import gspread
 from google.oauth2 import service_account
 from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
 from datetime import datetime, timedelta
+
+# Establecer la zona horaria local
+os.environ['TZ'] = 'America/Mexico_City'
+time.tzset()
 
 # ------------------- CONFIGURACIÓN FLASK -------------------
 app = Flask(__name__)
