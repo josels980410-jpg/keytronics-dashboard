@@ -6,7 +6,7 @@ from google.oauth2 import service_account
 from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
 from datetime import datetime, timedelta
 
-# Establecer la zona horaria local
+# ------------------- ZONA HORARIA -------------------
 os.environ['TZ'] = 'America/Mexico_City'
 time.tzset()
 
@@ -16,7 +16,7 @@ app.secret_key = os.environ.get("SECRET_KEY", "keytronics123")
 app.permanent_session_lifetime = timedelta(minutes=30)
 
 # ------------------- CONFIGURACIÓN GOOGLE SHEETS -------------------
-GOOGLE_SHEETS_ID = "1qExzOzO2YIK_ldAZsHFcQtHbBVHxIhQNKrg3kT6S1rI"  # ID hoja de cálculo
+GOOGLE_SHEETS_ID = "1qExzOzO2YIK_ldAZsHFcQtHbBVHxIhQNKrg3kT6S1rI"
 
 scope = [
     "https://spreadsheets.google.com/feeds",
@@ -24,8 +24,10 @@ scope = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-# ✅ Cargar credenciales desde variable de entorno (Render)
 google_credentials = os.getenv("GOOGLE_CREDENTIALS")
+sheet = None
+
+print("GOOGLE_CREDENTIALS detectada:", google_credentials is not None)
 
 if google_credentials:
     try:
@@ -35,11 +37,9 @@ if google_credentials:
         sheet = client.open_by_key(GOOGLE_SHEETS_ID).sheet1
         print("✅ Conexión exitosa con Google Sheets.")
     except Exception as e:
-        print(f"⚠️ Error al conectar con Google Sheets: {e}")
-        sheet = None
+        print("⚠️ Error conectando con Google Sheets:", e)
 else:
-    print("⚠️ No se encontró la variable de entorno GOOGLE_CREDENTIALS.")
-    sheet = None
+    print("⚠️ Variable GOOGLE_CREDENTIALS no encontrada.")
 
 # ------------------- USUARIOS PERMITIDOS -------------------
 USUARIOS = {
@@ -55,11 +55,10 @@ USUARIOS = {
     "usuario10": "Y8!fR5p#T1qZ"
 }
 
-# ------------------- FUNCIONES AUXILIARES -------------------
+# ------------------- FUNCIÓN: REGISTRAR ACCESO -------------------
 def registrar_acceso(usuario):
-    """Guarda en Google Sheets el registro de acceso."""
     if not sheet:
-        print("⚠️ No hay conexión con Google Sheets, acceso no registrado.")
+        print("⚠️ No hay conexión con Google Sheets. No se registró acceso.")
         return
 
     try:
@@ -68,9 +67,9 @@ def registrar_acceso(usuario):
         sheet.append_row([usuario, fecha, hora])
         print(f"✅ Acceso registrado: {usuario} - {fecha} {hora}")
     except Exception as e:
-        print(f"⚠️ Error al registrar acceso: {e}")
+        print("⚠️ Error guardando en Google Sheets:", e)
 
-# ------------------- RUTAS PRINCIPALES -------------------
+# ------------------- RUTA: LOGIN -------------------
 @app.route("/")
 def home():
     if "user" in session:
@@ -90,6 +89,7 @@ def login():
     else:
         return render_template("login.html", error="Usuario o contraseña incorrectos")
 
+# ------------------- RUTA: DASHBOARD -------------------
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
@@ -161,47 +161,30 @@ def dashboard():
             <h2>Bienvenido</h2>
 
             <iframe src="{embed_url}" allowfullscreen="true"
-                sandbox="allow-same-origin allow-scripts allow-forms"
-                onload="ocultarElementosPowerBI(this)"></iframe>
-
-            <script>
-                function ocultarElementosPowerBI(iframe) {{
-                    try {{
-                        let doc = iframe.contentWindow.document;
-                        setTimeout(() => {{
-                            const botones = doc.querySelectorAll('button, a, div');
-                            botones.forEach(el => {{
-                                if (el.innerText.includes('Microsoft') || el.innerText.includes('Power BI') || el.title?.includes('Compartir')) {{
-                                    el.style.display = 'none';
-                                }}
-                            }});
-                        }}, 3000);
-                    }} catch (e) {{
-                        console.warn("No se pudo modificar el contenido embebido (seguridad del iframe)");
-                    }}
-                }}
-            </script>
+                sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
         </body>
     </html>
     """
 
+# ------------------- DESCARGA ARCHIVO -------------------
 @app.route("/descargar_csv")
 def descargar_csv():
     if "user" not in session:
         return redirect(url_for("home"))
 
     directorio = os.path.dirname(os.path.abspath(__file__))
-    nombre_archivo = "datos_reporte_Keytronics.xlsx"
+    archivo = "datos_reporte_Keytronics.xlsx"
 
-    return send_from_directory(directory=directorio, path=nombre_archivo, as_attachment=True)
+    return send_from_directory(directory=directorio, path=archivo, as_attachment=True)
 
+# ------------------- LOGOUT -------------------
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
 
-# ------------------- EJECUCIÓN APP -------------------
+# ------------------- EJECUCIÓN -------------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
+    print("🚀 Servidor iniciando en puerto:", port)
     app.run(host="0.0.0.0", port=port, debug=False)
-
