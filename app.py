@@ -27,19 +27,23 @@ scope = [
 google_credentials = os.getenv("GOOGLE_CREDENTIALS")
 sheet = None
 
-print("GOOGLE_CREDENTIALS detectada:", google_credentials is not None)
-
-if google_credentials:
-    try:
+try:
+    if google_credentials:
+        # Si viene desde variable de entorno
         info = json.loads(google_credentials)
-        credentials = service_account.Credentials.from_service_account_info(info, scopes=scope)
-        client = gspread.authorize(credentials)
-        sheet = client.open_by_key(GOOGLE_SHEETS_ID).sheet1
-        print("✅ Conexión exitosa con Google Sheets.")
-    except Exception as e:
-        print("⚠️ Error conectando con Google Sheets:", e)
-else:
-    print("⚠️ Variable GOOGLE_CREDENTIALS no encontrada.")
+    else:
+        # Si no existe la variable, cargar archivo local
+        with open("credenciales_google.json", "r") as f:
+            info = json.load(f)
+        print("🔄 Credenciales cargadas desde credenciales_google.json")
+
+    credentials = service_account.Credentials.from_service_account_info(info, scopes=scope)
+    client = gspread.authorize(credentials)
+    sheet = client.open_by_key(GOOGLE_SHEETS_ID).sheet1
+    print("✅ Conexión exitosa con Google Sheets.")
+
+except Exception as e:
+    print("⚠️ Error conectando con Google Sheets:", e)
 
 # ------------------- USUARIOS PERMITIDOS -------------------
 USUARIOS = {
