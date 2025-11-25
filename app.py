@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 # ------------------- ZONA HORARIA -------------------
 os.environ['TZ'] = 'America/Mexico_City'
-time.tzset()
+#time.tzset()
 
 # ------------------- CONFIGURACIÓN FLASK -------------------
 app = Flask(__name__)
