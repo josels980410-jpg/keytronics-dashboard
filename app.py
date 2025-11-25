@@ -47,7 +47,7 @@ except Exception as e:
 
 # ------------------- USUARIOS PERMITIDOS -------------------
 USUARIOS = {
-    "usuario01": "r4#G9tPq!2Zm",
+    "usuario01": "654321987",
     "AlfonsoCampo": "N7$vL8qY#x3B",
     "AlejandroCampo": "tR!5mK2wQ9#z",
     "DavidVargas": "Fp8#Vd4!sZ1q",
