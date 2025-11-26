@@ -10,21 +10,33 @@ app.secret_key = os.environ.get("SECRET_KEY", "keytronics123")
 app.permanent_session_lifetime = timedelta(minutes=30)
 
 # ------------------- GOOGLE SHEETS -------------------
-GOOGLE_SHEETS_ID = "14x3JapIuLdgclmk4_ls3NCMWZVJF5fjNhyIGI6G86dE"
-CREDENCIALES_JSON = "credenciales_google.json"
-
+# ------------------- GOOGLE SHEETS -------------------
+GOOGLE_SHEETS_ID = os.environ.get("GOOGLE_SHEETS_ID", "14x3JapIuLdgclmk4_ls3NCMWZVJF5fjNhyIGI6G86dE")
+CREDENCIALES_JSON = "credenciales_google.json"  
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-print("🔍 Cargando credenciales desde:", CREDENCIALES_JSON)
+print("🔍 Intentando cargar credenciales (ENV or file)...")
 
+sheet = None
 try:
-    credentials = Credentials.from_service_account_file(CREDENCIALES_JSON, scopes=SCOPES)
+    google_credentials_env = os.environ.get("GOOGLE_CREDENTIALS")
+    if google_credentials_env:
+        # Si Render (o tu entorno) tiene el JSON en una variable de entorno
+        import json
+        creds_info = json.loads(google_credentials_env)
+        credentials = Credentials.from_service_account_info(creds_info, scopes=SCOPES)
+        print("🔑 Credenciales cargadas desde GOOGLE_CREDENTIALS (env).")
+    else:
+        # Fallback local (desarrollo)
+        credentials = Credentials.from_service_account_file(CREDENCIALES_JSON, scopes=SCOPES)
+        print("🔑 Credenciales cargadas desde archivo local.")
     client = gspread.authorize(credentials)
     sheet = client.open_by_key(GOOGLE_SHEETS_ID).sheet1
     print("✅ Conexión exitosa con Google Sheets (Service Account).")
 except Exception as e:
     print("⚠️ Error conectando con Google Sheets:", e)
     sheet = None
+
 
 # ------------------- USUARIOS PERMITIDOS -------------------
 USUARIOS = {
