@@ -2,7 +2,7 @@ import os
 import time
 import json
 import gspread
-from google.oauth2 import service_account
+from google.oauth2.service_account import Credentials
 from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
 from datetime import datetime, timedelta
 
@@ -17,31 +17,15 @@ app.permanent_session_lifetime = timedelta(minutes=30)
 
 # ------------------- CONFIGURACIÓN GOOGLE SHEETS -------------------
 GOOGLE_SHEETS_ID = "1qExzOzO2YIK_ldAZsHFcQtHbBVHxIhQNKrg3kT6S1rI"
+SHEET_FILE = "credenciales_google.json"
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-scope = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive"
-]
-
-google_credentials = os.getenv("GOOGLE_CREDENTIALS")
 sheet = None
-
 try:
-    if google_credentials:
-        # Si viene desde variable de entorno
-        info = json.loads(google_credentials)
-    else:
-        # Si no existe la variable, cargar archivo local
-        with open("credenciales_google.json", "r") as f:
-            info = json.load(f)
-        print("🔄 Credenciales cargadas desde credenciales_google.json")
-
-    credentials = service_account.Credentials.from_service_account_info(info, scopes=scope)
+    credentials = Credentials.from_service_account_file(SHEET_FILE, scopes=SCOPES)
     client = gspread.authorize(credentials)
     sheet = client.open_by_key(GOOGLE_SHEETS_ID).sheet1
-    print("✅ Conexión exitosa con Google Sheets.")
-
+    print("✅ Conexión exitosa con Google Sheets (Service Account).")
 except Exception as e:
     print("⚠️ Error conectando con Google Sheets:", e)
 
