@@ -9,11 +9,13 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "keytronics123")
 app.permanent_session_lifetime = timedelta(minutes=30)
 
-# ------------------- GOOGLE SHEETS (MÉTODO CORRECTO) -------------------
+# ------------------- GOOGLE SHEETS -------------------
 GOOGLE_SHEETS_ID = "14x3JapIuLdgclmk4_ls3NCMWZVJF5fjNhyIGI6G86dE"
 CREDENCIALES_JSON = "credenciales_google.json"
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
+
+print("🔍 Cargando credenciales desde:", CREDENCIALES_JSON)
 
 try:
     credentials = Credentials.from_service_account_file(CREDENCIALES_JSON, scopes=SCOPES)
@@ -40,6 +42,8 @@ USUARIOS = {
 
 # ------------------- FUNCIÓN: REGISTRAR ACCESO -------------------
 def registrar_acceso(usuario):
+    print("🚨 registrar_acceso() fue llamado por:", usuario)
+
     if not sheet:
         print("⚠️ No hay conexión con Google Sheets. No se registró acceso.")
         return
@@ -47,16 +51,16 @@ def registrar_acceso(usuario):
     try:
         fecha = datetime.now().strftime("%Y-%m-%d")
         hora = datetime.now().strftime("%H:%M:%S")
+        print("✏️ Intentando escribir en Google Sheets...")
         sheet.append_row([usuario, fecha, hora])
         print(f"✅ Acceso registrado: {usuario} - {fecha} {hora}")
     except Exception as e:
-        print("⚠️ Error guardando en Google Sheets:", e)
+        print("❌ ERROR al guardar en Google Sheets:", e)
+
 
 # ------------------- RUTA: LOGIN -------------------
 @app.route("/")
 def home():
-    if "user" in session:
-        return redirect(url_for("dashboard"))
     return render_template("login.html")
 
 @app.route("/login", methods=["POST"])
@@ -64,12 +68,21 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
 
+    print("\n==========================")
+    print("➡️ Intentando login con:", username)
+    print("==========================")
+
     if username in USUARIOS and USUARIOS[username] == password:
+        print("✔ Usuario y contraseña correctos")
+
         session.permanent = True
         session["user"] = username
+
         registrar_acceso(username)
+
         return redirect(url_for("dashboard"))
     else:
+        print("❌ Login falló")
         return render_template("login.html", error="Usuario o contraseña incorrectos")
 
 # ------------------- RUTA: DASHBOARD -------------------
@@ -79,7 +92,7 @@ def dashboard():
         return redirect(url_for("home"))
 
     embed_url = "https://app.powerbi.com/view?r=eyJrIjoiNTVjNWRkZjUtNjIwNy00OWE0LWJjMWItODcwYWNlNDA4Njg5IiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
-    
+
     return f"""
     <html>
         <head>
@@ -167,3 +180,4 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     print("🚀 Servidor iniciando en puerto:", port)
     app.run(host="0.0.0.0", port=port, debug=False)
+
