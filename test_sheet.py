@@ -2,7 +2,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 CREDENCIALES_JSON = "credenciales_google.json"
-GOOGLE_SHEETS_ID = "1qExzOzO2YIK_ldAZsHFcQtHbBVHxIhQNKrg3kT6S1rI"
+GOOGLE_SHEETS_ID = "14x3JapIuLdgclmk4_ls3NCMWZVJF5fjNhyIGI6G86dE"
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 

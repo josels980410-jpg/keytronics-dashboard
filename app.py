@@ -1,33 +1,28 @@
 import os
-import time
-import json
 import gspread
 from google.oauth2.service_account import Credentials
 from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
 from datetime import datetime, timedelta
-
-# ------------------- ZONA HORARIA -------------------
-os.environ['TZ'] = 'America/Mexico_City'
-#time.tzset()
 
 # ------------------- CONFIGURACIÓN FLASK -------------------
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "keytronics123")
 app.permanent_session_lifetime = timedelta(minutes=30)
 
-# ------------------- CONFIGURACIÓN GOOGLE SHEETS -------------------
-GOOGLE_SHEETS_ID = "1qExzOzO2YIK_ldAZsHFcQtHbBVHxIhQNKrg3kT6S1rI"
-SHEET_FILE = "credenciales_google.json"
+# ------------------- GOOGLE SHEETS (MÉTODO CORRECTO) -------------------
+GOOGLE_SHEETS_ID = "14x3JapIuLdgclmk4_ls3NCMWZVJF5fjNhyIGI6G86dE"
+CREDENCIALES_JSON = "credenciales_google.json"
+
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
-sheet = None
 try:
-    credentials = Credentials.from_service_account_file(SHEET_FILE, scopes=SCOPES)
+    credentials = Credentials.from_service_account_file(CREDENCIALES_JSON, scopes=SCOPES)
     client = gspread.authorize(credentials)
     sheet = client.open_by_key(GOOGLE_SHEETS_ID).sheet1
     print("✅ Conexión exitosa con Google Sheets (Service Account).")
 except Exception as e:
     print("⚠️ Error conectando con Google Sheets:", e)
+    sheet = None
 
 # ------------------- USUARIOS PERMITIDOS -------------------
 USUARIOS = {
@@ -113,10 +108,6 @@ def dashboard():
                     border: none;
                     border-radius: 10px;
                     box-shadow: 0 0 25px #00ff80;
-                    overflow: hidden;
-                }}
-                iframe::-webkit-scrollbar {{
-                    display: none;
                 }}
                 .top-buttons {{
                     position: absolute;
