@@ -17,7 +17,6 @@ app.secret_key = os.environ.get("SECRET_KEY", "keytronics123")
 app.permanent_session_lifetime = timedelta(minutes=30)
 
 # ------------------- GOOGLE SHEETS -------------------
-# ------------------- GOOGLE SHEETS -------------------
 GOOGLE_SHEETS_ID = os.environ.get("GOOGLE_SHEETS_ID", "14x3JapIuLdgclmk4_ls3NCMWZVJF5fjNhyIGI6G86dE")
 CREDENCIALES_JSON = "credenciales_google.json"  
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -47,7 +46,7 @@ except Exception as e:
 
 # ------------------- USUARIOS PERMITIDOS -------------------
 USUARIOS = {
-    "usuario01": "654321987",
+    "Jose_Consultor": "654321987",
     "AlfonsoCampo": "N7$vL8qY#x3B",
     "AlejandroCampo": "tR!5mK2wQ9#z",
     "DavidVargas": "Fp8#Vd4!sZ1q",
@@ -199,4 +198,3 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     print("🚀 Servidor iniciando en puerto:", port)
     app.run(host="0.0.0.0", port=port, debug=False)
-
