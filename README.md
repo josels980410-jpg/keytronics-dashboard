@@ -29,8 +29,12 @@ deactivate
 
 https://keytronics-dashboard.onrender.com/
 
-Usuario:  usuario01
-Contraseña:  r4#G9tPq!2Zm
+Usuario:  Jose_Consultor
+Contraseña:  654321987
+
+-----------HOJA GOOGLE SHEETS---------------------
+
+Keytronics_Prueba_Sheets
 
 --------------------------------------------------
 En VSCode, presiona:
