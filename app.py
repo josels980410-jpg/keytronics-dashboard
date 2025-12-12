@@ -109,7 +109,7 @@ def dashboard():
     if "user" not in session:
         return redirect(url_for("home"))
 
-    embed_url = "https://app.powerbi.com/view?r=eyJrIjoiMDkyMzgzMDMtNjE3Yi00YzJlLWFkODAtNjJkOTI5YWZmZjM0IiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
+    embed_url = "https://app.powerbi.com/view?r=eyJrIjoiZGIyZjlmMmMtNTM4OC00NDQ1LWFmNGUtZjJiODM2MGYzNzQyIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
 
     return f"""
     <html>
