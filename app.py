@@ -3,12 +3,15 @@ import time
 import gspread
 from google.oauth2.service_account import Credentials
 from flask import Flask, render_template, request, redirect, url_for, session, send_from_directory
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 
 # ------------------- ZONA HORARIA ------------------- 
-os.environ['TZ'] = 'America/Mexico_City' 
-time.tzset()
+os.environ['TZ'] = 'America/Mexico_City'
+
+if hasattr(time, "tzset"):
+    time.tzset()
+
 
 
 # ------------------- CONFIGURACIÓN FLASK -------------------
@@ -27,15 +30,14 @@ sheet = None
 try:
     google_credentials_env = os.environ.get("GOOGLE_CREDENTIALS")
     if google_credentials_env:
-        # Si Render (o tu entorno) tiene el JSON en una variable de entorno
         import json
         creds_info = json.loads(google_credentials_env)
         credentials = Credentials.from_service_account_info(creds_info, scopes=SCOPES)
         print("🔑 Credenciales cargadas desde GOOGLE_CREDENTIALS (env).")
     else:
-        # Fallback local (desarrollo)
         credentials = Credentials.from_service_account_file(CREDENCIALES_JSON, scopes=SCOPES)
         print("🔑 Credenciales cargadas desde archivo local.")
+
     client = gspread.authorize(credentials)
     sheet = client.open_by_key(GOOGLE_SHEETS_ID).sheet1
     print("✅ Conexión exitosa con Google Sheets (Service Account).")
@@ -58,6 +60,7 @@ USUARIOS = {
     "usuario10": "Y8!fR5p#T1qZ"
 }
 
+
 # ------------------- FUNCIÓN: REGISTRAR ACCESO -------------------
 def registrar_acceso(usuario):
     print("🚨 registrar_acceso() fue llamado por:", usuario)
@@ -76,10 +79,31 @@ def registrar_acceso(usuario):
         print("❌ ERROR al guardar en Google Sheets:", e)
 
 
+# ------------------- FUNCIÓN: MENSAJE DE VIGENCIA -------------------
+def obtener_mensaje_vigencia():
+    hoy = date.today()
+    fecha_limite = date(2025, 12, 31)
+
+    if hoy <= fecha_limite:
+        return (
+            "Este sistema se encuentra en fase de demostración y evaluación.<br><br>"
+            "La vigencia de esta versión está contemplada hasta el "
+            "<strong>31 de diciembre</strong>.<br><br>"
+            "Para cualquier duda o continuidad del servicio, favor de contactar al proveedor."
+        )
+    else:
+        return (
+            "<strong>La vigencia ha finalizado.</strong><br><br>"
+            "Favor de contactar al proveedor para la reactivación del servicio."
+        )
+
+
 # ------------------- RUTA: LOGIN -------------------
 @app.route("/")
 def home():
-    return render_template("login.html")
+    mensaje_vigencia = obtener_mensaje_vigencia()
+    return render_template("login.html", mensaje_vigencia=mensaje_vigencia)
+
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -101,7 +125,13 @@ def login():
         return redirect(url_for("dashboard"))
     else:
         print("❌ Login falló")
-        return render_template("login.html", error="Usuario o contraseña incorrectos")
+        mensaje_vigencia = obtener_mensaje_vigencia()
+        return render_template(
+            "login.html",
+            error="Usuario o contraseña incorrectos",
+            mensaje_vigencia=mensaje_vigencia
+        )
+
 
 # ------------------- RUTA: DASHBOARD -------------------
 @app.route("/dashboard")
@@ -176,6 +206,7 @@ def dashboard():
     </html>
     """
 
+
 # ------------------- DESCARGA ARCHIVO -------------------
 @app.route("/descargar_csv")
 def descargar_csv():
@@ -187,11 +218,13 @@ def descargar_csv():
 
     return send_from_directory(directory=directorio, path=archivo, as_attachment=True)
 
+
 # ------------------- LOGOUT -------------------
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
+
 
 # ------------------- EJECUCIÓN -------------------
 if __name__ == "__main__":
