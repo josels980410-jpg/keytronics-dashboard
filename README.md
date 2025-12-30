@@ -2,7 +2,7 @@ Para actualizar cualquier modificación, en nuestra terminal tenemos que correr 
 los siguientes comandos: 
 
 1.-    git add .
-2.-    git commit -m "Actualizacion 30122025"
+2.-    git commit -m "Mensaje de Vigencia"
 3.-    git push origin master
 
 Nota: 
