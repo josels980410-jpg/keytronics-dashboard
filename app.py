@@ -94,7 +94,8 @@ def obtener_mensaje_vigencia():
     else:
         return (
             "<strong>La vigencia ha finalizado.</strong><br><br>"
-            "Favor de contactar al proveedor para la reactivación del servicio."
+            "La ultima actualización es del 31/12/2025"
+            "Favor de contactar al proveedor para la Actualización."
         )
 
 
