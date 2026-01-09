@@ -160,7 +160,7 @@ def dashboard():
         return redirect(url_for("home"))
 
     embed_url = (
-        "https://app.powerbi.com/view?r=eyJrIjoiNDdiZDVmNzQtNTQwZi00NGQyLTliMzctNzk4NzcxMTQ0ZDAwIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
+        "https://app.powerbi.com/view?r=eyJrIjoiMWQzYzgyNmEtODdmYS00YWNmLWJhMmQtNmIyMmYzNWY4ODY1IiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
     )
 
     return f"""
