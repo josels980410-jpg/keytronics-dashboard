@@ -2,7 +2,7 @@ Para actualizar cualquier modificación, en nuestra terminal tenemos que correr 
 los siguientes comandos: 
 
 1.-    git add .
-2.-    git commit -m "Actualización de URL"
+2.-    git commit -m "Actualización reporte en excel"
 3.-    git push origin master
 
 Nota: 
