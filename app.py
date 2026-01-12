@@ -177,7 +177,7 @@ def login():
     print("➡️ Intentando login con:", username)
     print("==========================")
 
-    if username in USUARIOS and USUARIOS[username] == password:
+    if username in USUARIOS and USUARIOS[username]["password"] == password:
         print("✔ Login exitoso")
 
         session.permanent = True
