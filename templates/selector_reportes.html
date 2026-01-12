@@ -52,15 +52,15 @@
 
 <h1>Selecciona un reporte</h1>
 
-{% if "Facturación, Cobranza y seguimiento de Saldo" in roles %}
+{% if "reporte_1" in roles %}
     <a class="btn" href="{{ url_for('ver_reporte', reporte_id='reporte_1') }}">
-        📊 Reporte 1
+        📊 Facturación, Cobranza y Seguimiento de Saldos
     </a>
 {% endif %}
 
-{% if "Gestión y Desempeño de Proveedores" in roles %}
+{% if "reporte_2" in roles %}
     <a class="btn" href="{{ url_for('ver_reporte', reporte_id='reporte_2') }}">
-        📈 Reporte 2
+        📈 Gestión y Desempeño de Proveedores
     </a>
 {% endif %}
 
