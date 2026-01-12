@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Seleccionar Reporte - Keytronics</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: block;
+            width: 260px;
+            text-align: center;
+            margin: 10px 0;
+            padding: 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border: 1px solid #238636;
+            color: #238636;
+        }
+
+        .btn:hover {
+            background-color: #238636;
+            color: #0d1117;
+        }
+
+        .logout {
+            margin-top: 40px;
+            color: #f85149;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Selecciona un reporte</h1>
+
+{% if "reporte_1" in roles %}
+    <a class="btn" href="{{ url_for('ver_reporte', reporte_id='reporte_1') }}">
+        📊 Reporte 1
+    </a>
+{% endif %}
+
+{% if "reporte_2" in roles %}
+    <a class="btn" href="{{ url_for('ver_reporte', reporte_id='reporte_2') }}">
+        📈 Reporte 2
+    </a>
+{% endif %}
+
+<a class="logout" href="{{ url_for('logout') }}">
+    Cerrar sesión
+</a>
+
+</body>
+</html>
