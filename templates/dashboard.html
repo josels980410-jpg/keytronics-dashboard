@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Facturación - Keytronics</title>
+    <title>Dashboard Power BI - Keytronics</title>
+
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -18,92 +19,97 @@
             padding: 20px;
             text-align: center;
             border-bottom: 2px solid #238636;
+            position: relative;
         }
 
         h1 {
-            color: #ffffff;
             margin: 0;
-            font-size: 28px;
+            font-size: 26px;
+            color: #ffffff;
+        }
+
+        .top-buttons {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            border: 1px solid #238636;
+            color: #238636;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background-color: #238636;
+            color: #0d1117;
+        }
+
+        .btn-danger {
+            border-color: #f85149;
+            color: #f85149;
+        }
+
+        .btn-danger:hover {
+            background-color: #f85149;
+            color: #0d1117;
         }
 
         .container {
-            margin: 40px auto;
-            width: 90%;
-            max-width: 1000px;
+            margin: 30px auto;
+            width: 95%;
+            max-width: 1200px;
             background-color: #161b22;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(35, 134, 54, 0.4);
             padding: 20px;
+            box-shadow: 0 0 15px rgba(35, 134, 54, 0.4);
         }
 
         iframe {
             width: 100%;
-            height: 600px;
+            height: 75vh;
             border: none;
             border-radius: 8px;
             box-shadow: 0 0 15px #238636;
         }
-
-        .logout {
-            text-align: right;
-            margin-top: 10px;
-        }
-
-        .logout a {
-            color: #f85149;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .logout a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
+
 <body>
-    <header>
-        <h1>Panel de Facturación - Keytronics</h1>
-    </header>
 
-    <div class="container">
-        <h2>Bienvenido</h2>
-        <p>Este panel muestra el resumen de facturación en tiempo real:</p>
+<header>
+    <h1>Panel Power BI - Keytronics</h1>
 
-        <!-- 🔒 IFRAME EMBEBIDO DE POWER BI SIN BOTONES -->
-        <iframe 
-            src="https://app.powerbi.com/view?r=eyJrIjoiMWQzYzgyNmEtODdmYS00YWNmLWJhMmQtNmIyMmYzNWY4ODY1IiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
-            title="Dashboard Power BI"
-            allowfullscreen="true"
-            sandbox="allow-same-origin allow-scripts allow-forms"
-            onload="ocultarElementosPowerBI(this)">
-        </iframe>
+    <div class="top-buttons">
 
-        <div class="logout">
-            <a href="/logout">Cerrar sesión</a>
-        </div>
+        {% if mostrar_descarga %}
+            <a href="{{ url_for('descargar_csv') }}" class="btn">
+                📄 Descargar Excel
+            </a>
+        {% endif %}
+
+        <a href="{{ url_for('dashboard') }}" class="btn">
+            ⬅ Reportes
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">
+            Cerrar sesión
+        </a>
     </div>
+</header>
 
-    <script>
-        // Intenta ocultar botones y menús de Power BI si aparecen
-        function ocultarElementosPowerBI(iframe) {
-            try {
-                let doc = iframe.contentWindow.document;
-                setTimeout(() => {
-                    const elementos = doc.querySelectorAll('button, a, div');
-                    elementos.forEach(el => {
-                        if (
-                            el.innerText.includes('Microsoft') ||
-                            el.innerText.includes('Power BI') ||
-                            el.title?.includes('Compartir')
-                        ) {
-                            el.style.display = 'none';
-                        }
-                    });
-                }, 3000);
-            } catch (e) {
-                console.warn("No se pudo modificar el contenido embebido (restricciones del iframe).");
-            }
-        }
-    </script>
+<div class="container">
+    <iframe
+        src="{{ embed_url }}"
+        allowfullscreen="true">
+    </iframe>
+</div>
+
 </body>
 </html>

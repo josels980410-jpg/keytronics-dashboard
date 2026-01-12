@@ -138,6 +138,10 @@ USUARIOS = {
     }
 }
 
+POWER_BI_REPORTES = {
+    "reporte_1": "https://app.powerbi.com/view?r=eyJrIjoiMWQzYzgyNmEtODdmYS00YWNmLWJhMmQtNmIyMmYzNWY4ODY1IiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9",
+    "reporte_2": "https://app.powerbi.com/view?r=eyJrIjoiOTdjYmNlZjEtYWQ0Yy00YjUyLWE5Y2MtYWMwZmYwM2E3ZGU5IiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
+}
 
 # =========================
 # FUNCIÓN: REGISTRAR ACCESO
@@ -167,119 +171,58 @@ def registrar_acceso(usuario):
 def home():
     return render_template("login.html")
 
-
 @app.route("/login", methods=["POST"])
 def login():
-    username = request.form["username"]
-    password = request.form["password"]
+    u = request.form["username"]
+    p = request.form["password"]
 
-    print("\n==========================")
-    print("➡️ Intentando login con:", username)
-    print("==========================")
+    if u in USUARIOS and USUARIOS[u]["password"] == p:
+        session["user"] = u
+        session["roles"] = USUARIOS[u]["roles"]
+        registrar_acceso(u)
+        return redirect("/dashboard")
 
-    if username in USUARIOS and USUARIOS[username]["password"] == password:
-        print("✔ Login exitoso")
-
-        session.permanent = True
-        session["user"] = username
-        session["roles"] = USUARIOS[username]["roles"]
-
-        registrar_acceso(username)
-        return redirect(url_for("dashboard"))
-
-    print("❌ Login fallido")
-    return render_template(
-        "login.html",
-        error="Usuario o contraseña incorrectos"
-    )
-
+    return render_template("login.html", error="Credenciales incorrectas")
 
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
+        return redirect("/")
+    return render_template("selector_reportes.html", roles=session["roles"])
+
+@app.route("/reporte/<reporte_id>")
+def ver_reporte(reporte_id):
+    if "user" not in session:
         return redirect(url_for("home"))
 
-    embed_url = (
-        "https://app.powerbi.com/view?r=eyJrIjoiMWQzYzgyNmEtODdmYS00YWNmLWJhMmQtNmIyMmYzNWY4ODY1IiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
+    if reporte_id not in POWER_BI_REPORTES:
+        return "Reporte no existe", 404
+
+    if reporte_id not in session.get("roles", []):
+        return "⛔ Sin permiso", 403
+
+    return render_template(
+        "dashboard.html",
+        embed_url=POWER_BI_REPORTES[reporte_id],
+        mostrar_descarga=reporte_id == "reporte_1"
     )
-
-    return f"""
-    <html>
-    <head>
-        <title>Dashboard Power BI</title>
-        <style>
-            body {{
-                font-family: 'Segoe UI', Arial, sans-serif;
-                background-color: #0a0a0a;
-                color: #00ff80;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 20px;
-                margin: 0;
-            }}
-            h2 {{
-                text-shadow: 0 0 8px #00ff80;
-            }}
-            iframe {{
-                width: 95%;
-                height: 85vh;
-                border-radius: 10px;
-                box-shadow: 0 0 25px #00ff80;
-            }}
-            .top-buttons {{
-                position: absolute;
-                top: 15px;
-                right: 25px;
-                display: flex;
-                gap: 10px;
-            }}
-            .btn {{
-                border: 1px solid #00ff80;
-                color: #00ff80;
-                padding: 8px 15px;
-                border-radius: 6px;
-                text-decoration: none;
-            }}
-            .btn:hover {{
-                background: #00ff80;
-                color: #0a0a0a;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class="top-buttons">
-            <a href="{url_for('descargar_csv')}" class="btn">📄 Reporte</a>
-            <a href="{url_for('logout')}" class="btn">Cerrar sesión</a>
-        </div>
-
-        <h2>Bienvenido</h2>
-        <iframe src="{embed_url}" allowfullscreen></iframe>
-    </body>
-    </html>
-    """
-
 
 @app.route("/descargar_csv")
 def descargar_csv():
     if "user" not in session:
         return redirect(url_for("home"))
 
-    directorio = os.path.dirname(os.path.abspath(__file__))
-    archivo = "datos_reporte_Keytronics.xlsx"
-
     return send_from_directory(
-        directory=directorio,
-        path=archivo,
+        os.getcwd(),
+        "datos_reporte_Keytronics.xlsx",
         as_attachment=True
     )
 
 
 @app.route("/logout")
 def logout():
-    session.pop("user", None)
-    return redirect(url_for("home"))
-
+    session.clear()
+    return redirect("/")
 
 # =========================
 # EJECUCIÓN
