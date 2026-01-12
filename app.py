@@ -114,12 +114,12 @@ USUARIOS = {
 
     "VidalCamacho": {
         "password": "b9#Zt6Pq!M3r",
-        "roles": ["reporte_1", "reporte_2"]
+        "roles": ["reporte_1"]
     },
 
     "HumbertoColin": {
         "password":"Gv3!Qw8#xN5z",
-        "roles": ["reporte_1", "reporte_2"]
+        "roles": ["reporte_1"]
     },
 
     "JaimeFontanet": {
