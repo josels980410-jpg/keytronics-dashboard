@@ -87,16 +87,55 @@ except Exception as e:
 # USUARIOS PERMITIDOS
 # =========================
 USUARIOS = {
-    "Jose_Consultor": "654321987",
-    "AlfonsoCampo": "N7$vL8qY#x3B",
-    "AlejandroCampo": "tR!5mK2wQ9#z",
-    "DavidVargas": "Fp8#Vd4!sZ1q",
-    "BrendaMuñoz": "H2!xW7qR#k9L",
-    "VidalCamacho": "b9#Zt6Pq!M3r",
-    "HumbertoColin": "Gv3!Qw8#xN5z",
-    "JaimeFontanet": "L1#pT9v!R6kS",
-    "AlbertoEchavarria": "s4!Kz7Q#n2Wm",
-    "usuario10": "Y8!fR5p#T1qZ"
+    "Jose_Consultor": {
+        "password": "654321987",
+        "roles": ["reporte_1", "reporte_2"]
+    },
+
+    "AlfonsoCampo": {
+        "password":"N7$vL8qY#x3B",
+        "roles": ["reporte_1", "reporte_2"]
+    },
+
+    "AlejandroCampo": {
+        "password": "tR!5mK2wQ9#z",
+        "roles": ["reporte_1"]
+    },
+
+    "DavidVargas": {
+        "password":"Fp8#Vd4!sZ1q",
+        "roles": ["reporte_1"]
+    },
+
+    "BrendaMuñoz": {
+        "password":"H2!xW7qR#k9L",
+        "roles": ["reporte_1"]
+    },
+
+    "VidalCamacho": {
+        "password": "b9#Zt6Pq!M3r",
+        "roles": ["reporte_1", "reporte_2"]
+    },
+
+    "HumbertoColin": {
+        "password":"Gv3!Qw8#xN5z",
+        "roles": ["reporte_1", "reporte_2"]
+    },
+
+    "JaimeFontanet": {
+        "password":"L1#pT9v!R6kS",
+        "roles": ["reporte_1", "reporte_2"]
+    },
+
+    "AlbertoEchavarria": {
+        "password":"s4!Kz7Q#n2Wm",
+        "roles": ["reporte_1"]
+    },
+
+    "Laura": {
+        "password":"Y8!fR5p#T1qZ",
+        "roles": ["reporte_2"]
+    }
 }
 
 
@@ -143,6 +182,7 @@ def login():
 
         session.permanent = True
         session["user"] = username
+        session["roles"] = USUARIOS[username]["roles"]
 
         registrar_acceso(username)
         return redirect(url_for("dashboard"))
