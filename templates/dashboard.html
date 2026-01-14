@@ -88,9 +88,15 @@
 
     <div class="top-buttons">
 
-        {% if mostrar_descarga %}
+        {% if reporte_id == "reporte_1" %}
             <a href="{{ url_for('descargar_csv') }}" class="btn">
-                📄 Descargar Excel
+                 📄 Descargar Facturación
+            </a>
+        {% endif %}
+
+        {% if reporte_id == "reporte_2" %}
+            <a href="{{ url_for('descargar_inventario') }}" class="btn">
+                📦 Descargar Inventario
             </a>
         {% endif %}
 

@@ -15,7 +15,8 @@ from flask import (
     redirect,
     url_for,
     session,
-    send_from_directory
+    send_from_directory,
+    send_file
 )
 
 from datetime import datetime, timedelta
@@ -204,7 +205,7 @@ def ver_reporte(reporte_id):
     return render_template(
         "dashboard.html",
         embed_url=POWER_BI_REPORTES[reporte_id],
-        mostrar_descarga=reporte_id == "reporte_1"
+        reporte_id=reporte_id
     )
 
 @app.route("/descargar_csv")
@@ -218,6 +219,18 @@ def descargar_csv():
         as_attachment=True
     )
 
+@app.route("/descargar_inventario")
+def descargar_inventario():
+    if "user" not in session:
+        return redirect(url_for("home"))
+
+    ruta_archivo = os.path.join("static", "excel", "Reporte_inventario.xlsx")
+
+    return send_file(
+        ruta_archivo,
+        as_attachment=True,
+        download_name="Reporte_inventario.xlsx"
+    )
 
 @app.route("/logout")
 def logout():
