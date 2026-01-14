@@ -224,13 +224,12 @@ def descargar_inventario():
     if "user" not in session:
         return redirect(url_for("home"))
 
-    ruta_archivo = os.path.join("static", "excel", "Reporte_inventario.xlsx")
-
-    return send_file(
-        ruta_archivo,
-        as_attachment=True,
-        download_name="Reporte_inventario.xlsx"
+    return send_from_directory(
+        os.getcwd(),
+        "Reporte_inventario.xlsx",
+        as_attachment=True
     )
+
 
 @app.route("/logout")
 def logout():
