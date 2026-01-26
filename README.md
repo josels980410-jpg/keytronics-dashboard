@@ -48,3 +48,6 @@ Te saldrá una lista de intérpretes.
 Debes elegir uno que se vea más o menos así:
 
 ✔ ./venv/Scripts/python.exe (en Windows)
+
+
+Cambios
