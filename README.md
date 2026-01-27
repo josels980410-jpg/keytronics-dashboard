@@ -4,6 +4,30 @@ python -m venv venv - Crear entorno virtual
 # para iniciar el entorno virtual 
 C:\Entornos_Virtuales\venv_keytronics\Scripts\Activate.ps1
 
+# Cambio de repositorio
+# 1.- Eliminar la credencial de windows 
+    Primero, obligamos al sistema a olvidar la contraseña o token que guardamos.
+           1.- Presiona la tecla Windows y escribe: Administrador de credenciales.
+           2.- Entra en Credenciales de Windows.
+           3.- Busca en la lista "Credenciales genéricas" cualquier entrada que diga git:https://github.com o github.com.
+           4.- Despliégala y dale clic en Quitar.
+# 2.- Desvincular la cuenta en VS Code 
+    Para que VS Code no intente usar la sesión de Keytronics que quedó abierta:
+           1.-Haz clic en el ícono de la personita (abajo a la izquierda en la barra de actividad).
+           2.- Si aparece la cuenta de (keytronics.soporte@gmail.com o josels980410@gmail.com), dale clic y selecciona Sign Out
+# 3.- Configurar el nuevo repositorio
+    Ahora, abre la carpeta de tu otro proyecto en VS Code y haz lo siguiente en la terminal:
+    * Cambia el destino:
+           git remote set-url origin https://github.com/josels980410-jpg/keytronics-dashboard.git
+           git remote set-url origin https://github.com/      .git
+
+    * Configura tu nombre personal
+          git config user.name "Jose Luna"
+          git config user.email "josels980410@gmail.com"
+
+          git config user.name ""
+          git config user.email ""
+
 # Para actualizar el repositorio
 
 1.-    git add .
