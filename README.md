@@ -25,8 +25,14 @@ C:\Entornos_Virtuales\venv_keytronics\Scripts\Activate.ps1
           git config user.name "Jose Luna"
           git config user.email "josels980410@gmail.com"
 
-          git config user.name ""
-          git config user.email ""
+          git config user.email "keytronics.soporte@gmail.com"
+          git config user.name "Keytronics Soporte"
+
+    * Confirmamos correo y nombre 
+         git config user.email
+         git config user.name
+
+
 
 # Para actualizar el repositorio
 
@@ -68,3 +74,16 @@ Te saldrá una lista de intérpretes.
 Debes elegir uno que se vea más o menos así:
 
 ✔ ./venv/Scripts/python.exe (en Windows)
+
+
+
+
+
+
+# Correo de la gmail de la memora 
+keytronics.soporte@gmail.com
+Password1$
+
+# Posible Power BI 
+BusinessKey@Keytronics.onmicrosoft.com
+Password1$
