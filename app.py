@@ -134,14 +134,14 @@ USUARIOS = {
     },
 
     "Laura": {
-        "password":"Y8!fR5p#T1qZ",
+        "password":"Almacen9821$",
         "roles": ["reporte_2"]
     }
 }
 
 POWER_BI_REPORTES = {
     "reporte_1": "https://app.powerbi.com/view?r=eyJrIjoiNzRhYmRmZGItZmU2OC00MzljLWJkYjItNzJiMzkyNTRlY2JjIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9",
-    "reporte_2": "https://app.powerbi.com/view?r=eyJrIjoiZmU0NTdhMGQtNmFiYi00OTBiLWFjZWQtYjRhMDU0Zjc5NmEwIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
+    "reporte_2": "https://app.powerbi.com/view?r=eyJrIjoiZGQyODlmMzYtNTlhMi00YThmLWEyZjAtNjVkNDU1MzQzMjAzIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
 }
 
 # =========================
