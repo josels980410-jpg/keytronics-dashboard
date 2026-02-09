@@ -13,3 +13,5 @@ cachetools==6.2.1
 rsa==4.9.1
 pyasn1==0.6.1
 pyasn1-modules==0.4.2
+
+setuptools
