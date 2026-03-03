@@ -136,6 +136,11 @@ USUARIOS = {
     "Laura": {
         "password":"Almacen9821$",
         "roles": ["reporte_2"]
+    },
+
+    "Ramon": {
+        "password":"Ramon2026$",
+        "roles": ["reporte_1", "reporte_2"]
     }
 }
 
