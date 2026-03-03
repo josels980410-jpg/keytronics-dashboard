@@ -139,7 +139,7 @@ USUARIOS = {
     },
 
     "Ramon": {
-        "password":"Ramon2026$",
+        "password":"Ramon2026",
         "roles": ["reporte_1", "reporte_2"]
     }
 }
