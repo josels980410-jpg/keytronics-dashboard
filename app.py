@@ -146,7 +146,7 @@ USUARIOS = {
 
 POWER_BI_REPORTES = {
     "reporte_1": "https://app.powerbi.com/view?r=eyJrIjoiNTY2Nzg5MjEtN2VmMi00ODBkLTllNWMtODlkYjg1MzhiZmVjIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9",
-    "reporte_2": "https://app.powerbi.com/view?r=eyJrIjoiZGQyODlmMzYtNTlhMi00YThmLWEyZjAtNjVkNDU1MzQzMjAzIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
+    "reporte_2": "https://app.powerbi.com/view?r=eyJrIjoiNDRlNTRjZWMtNGRiMS00MGYxLTgyMDMtMGE2MzkxODAxMWRkIiwidCI6IjAzODk5MTIxLWQ5NzYtNDRlOS1iODI0LTFmYzU1N2JmZGRjZSJ9"
 }
 
 # =========================
