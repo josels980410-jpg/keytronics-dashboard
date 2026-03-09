@@ -93,7 +93,6 @@ USUARIOS = {
         "roles": ["reporte_1", "reporte_2"]
     },
 
-
     # "AlfonsoCampo": {
     #     "password":"N7$vL8qY#x3B",
     #     "roles": ["reporte_1", "reporte_2"]
