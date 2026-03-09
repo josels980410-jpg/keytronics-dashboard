@@ -93,55 +93,56 @@ USUARIOS = {
         "roles": ["reporte_1", "reporte_2"]
     },
 
-    "AlfonsoCampo": {
-        "password":"N7$vL8qY#x3B",
-        "roles": ["reporte_1", "reporte_2"]
-    },
 
-    "AlejandroCampo": {
-        "password": "tR!5mK2wQ9#z",
-        "roles": ["reporte_1"]
-    },
+    # "AlfonsoCampo": {
+    #     "password":"N7$vL8qY#x3B",
+    #     "roles": ["reporte_1", "reporte_2"]
+    # },
 
-    "DavidVargas": {
-        "password":"Fp8#Vd4!sZ1q",
-        "roles": ["reporte_1"]
-    },
+    # "AlejandroCampo": {
+    #     "password": "tR!5mK2wQ9#z",
+    #     "roles": ["reporte_1"]
+    # },
 
-    "BrendaMuñoz": {
-        "password":"H2!xW7qR#k9L",
-        "roles": ["reporte_1"]
-    },
+    # "DavidVargas": {
+    #     "password":"Fp8#Vd4!sZ1q",
+    #     "roles": ["reporte_1"]
+    # },
 
-    "VidalCamacho": {
-        "password": "b9#Zt6Pq!M3r",
-        "roles": ["reporte_1", "reporte_2"]
-    },
+    # "BrendaMuñoz": {
+    #     "password":"H2!xW7qR#k9L",
+    #     "roles": ["reporte_1"]
+    # },
 
-    "HumbertoColin": {
-        "password":"Gv3!Qw8#xN5z",
-        "roles": ["reporte_1", "reporte_2"]
-    },
+    # "VidalCamacho": {
+    #     "password": "b9#Zt6Pq!M3r",
+    #     "roles": ["reporte_1", "reporte_2"]
+    # },
 
-    "JaimeFontanet": {
-        "password":"L1#pT9v!R6kS",
-        "roles": ["reporte_1", "reporte_2"]
-    },
+    # "HumbertoColin": {
+    #     "password":"Gv3!Qw8#xN5z",
+    #     "roles": ["reporte_1", "reporte_2"]
+    # },
 
-    "AlbertoEchavarria": {
-        "password":"s4!Kz7Q#n2Wm",
-        "roles": ["reporte_1", "reporte_2"]
-    },
+    # "JaimeFontanet": {
+    #     "password":"L1#pT9v!R6kS",
+    #     "roles": ["reporte_1", "reporte_2"]
+    # },
 
-    "Laura": {
-        "password":"Almacen9821$",
-        "roles": ["reporte_2"]
-    },
+    # "AlbertoEchavarria": {
+    #     "password":"s4!Kz7Q#n2Wm",
+    #     "roles": ["reporte_1", "reporte_2"]
+    # },
 
-    "Ramon": {
-        "password":"Ramon2026",
-        "roles": ["reporte_1", "reporte_2"]
-    }
+    # "Laura": {
+    #     "password":"Almacen9821$",
+    #     "roles": ["reporte_2"]
+    # },
+
+    # "Ramon": {
+    #     "password":"Ramon2026",
+    #     "roles": ["reporte_1", "reporte_2"]
+    # }
 }
 
 POWER_BI_REPORTES = {
